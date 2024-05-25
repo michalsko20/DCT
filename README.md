@@ -1,6 +1,6 @@
 Here's the content for the `README.txt`. You can copy and paste it into your README file:
 
-```
+
 # Image Compression and Transformation using DCT and DFT
 
 This project contains three main Python scripts for image compression and transformation using Discrete Cosine Transform (DCT) and Discrete Fourier Transform (DFT). The scripts demonstrate the process of dividing an image into blocks, applying transformations, compressing the transformed data, and reconstructing the image. Additionally, the scripts evaluate the performance and errors associated with the compression methods.
@@ -36,11 +36,6 @@ This script performs compression on an image using DCT with different techniques
     - The original image, DCT image, reconstructed images, and error images are displayed.
     - The size of the images before and after compression is plotted.
 
-### Usage:
-```bash
-python lena_DCT.py
-```
-
 ## 2. `utils.py`
 
 This script contains utility functions for DCT, IDCT, DFT, and block manipulation.
@@ -70,11 +65,6 @@ This script processes an image using DCT and IDCT with different block sizes and
     - The times for DCT and IDCT are plotted against block sizes.
     - Errors are calculated and plotted as Mean Absolute Error (MAE) and Mean Squared Error (MSE).
 
-### Usage:
-```bash
-python DCT_alg.py
-```
-
 ## Results
 
 - The results for DCT and IDCT analysis are saved in the `DCT_identyfikacja` directory.
@@ -96,5 +86,3 @@ pip install opencv-python-headless numpy matplotlib scipy
 
 This project is licensed under the MIT License.
 ```
-
-You can create a new file named `README.txt` and paste this content into it.
