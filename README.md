@@ -3,7 +3,7 @@ Here's the content for the `README.txt`. You can copy and paste it into your REA
 
 # Image Compression and Transformation using DCT and DFT
 
-This project contains three main Python scripts for image compression and transformation using Discrete Cosine Transform (DCT) and Discrete Fourier Transform (DFT). The scripts demonstrate the process of dividing an image into blocks, applying transformations, compressing the transformed data, and reconstructing the image. Additionally, the scripts evaluate the performance and errors associated with the compression methods.
+This project contains three main Python scripts for image compression and transformation using Discrete Cosine Transform (DCT). The scripts demonstrate the process of dividing an image into blocks, applying transformations, compressing the transformed data, and reconstructing the image. Additionally, the scripts evaluate the performance and errors associated with the compression methods.
 
 ## Files
 
