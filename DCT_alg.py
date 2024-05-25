@@ -17,26 +17,17 @@ def process_image_with_different_block_sizes(image, block_sizes, output_dir):
     idct_times = []
 
     for idx, block_size in enumerate(block_sizes):
-        # Divide the image into blocks
-        blocks = utils.divide_into_blocks(image, block_size)
-
-        # Measure DCT time
+        # Compute DCT for the image with the given block size
         start_time = time.time()
-        dct_blocks = [utils.my_dft(block, block_size) for block in blocks]
+        dct_image = utils.my_dct2_block(image, block_size)
         dct_time = time.time() - start_time
         dct_times.append(dct_time)
 
-        # Merge DCT blocks into one image
-        dct_image = utils.merge_blocks(dct_blocks, image.shape, block_size)
-
-        # Measure IDCT time
+        # Compute IDCT for the image with the given block size
         start_time = time.time()
-        idct_blocks = [utils.my_idft(block, block_size) for block in dct_blocks]
+        idct_image = utils.my_idct2_block(dct_image, block_size)
         idct_time = time.time() - start_time
         idct_times.append(idct_time)
-
-        # Merge IDCT blocks into one image
-        idct_image = utils.merge_blocks(idct_blocks, image.shape, block_size)
 
         # Display results
         axs[idx, 0].imshow(image, cmap="gray")
@@ -50,7 +41,7 @@ def process_image_with_different_block_sizes(image, block_sizes, output_dir):
         axs[idx, 2].imshow(idct_image, cmap="gray")
         axs[idx, 2].set_title("IDCT of Image")
         axs[idx, 2].axis("off")
-
+        print("dzialam")
     plt.suptitle("DCT and IDCT for Different Block Sizes")
     plt.savefig(
         os.path.join(output_dir, "DCT_IDCT_Different_Block_Sizes.jpg"), format="jpg"
@@ -66,7 +57,7 @@ image = cv2.imread("lena.jpg", cv2.IMREAD_GRAYSCALE)
 image = cv2.resize(image, (256, 256))
 
 # Block sizes to test
-block_sizes = [8, 16, 32]
+block_sizes = [2, 4, 8, 16]
 
 # Process the image for different block sizes
 dct_times, idct_times = process_image_with_different_block_sizes(
@@ -106,8 +97,8 @@ blocks = utils.divide_into_blocks(image, BLOCK_SIZE)
 # Merge blocks into one image
 merged_blocks = utils.merge_blocks(blocks, image.shape, BLOCK_SIZE)
 
-# Calculate DFT for each block
-dft_blocks = [utils.my_dft(block, BLOCK_SIZE) for block in blocks]
+# Calculate DCT for each block
+dct_blocks = [utils.my_dct2_block(block, BLOCK_SIZE) for block in blocks]
 
 # Prepare plots
 fig, axs = plt.subplots(3, 8, figsize=(20, 10))
@@ -118,24 +109,24 @@ percent_mae_values = []
 percent_mse_values = []
 
 for i in range(1, 9):
-    zeroed_dft_blocks = utils.zero_last_rows_and_columns(dft_blocks, i, i)
-    merged_blocks_dft = utils.merge_blocks(zeroed_dft_blocks, image.shape, BLOCK_SIZE)
+    zeroed_dct_blocks = utils.zero_last_rows_and_columns(dct_blocks, i, i)
+    merged_blocks_dct = utils.merge_blocks(zeroed_dct_blocks, image.shape, BLOCK_SIZE)
 
-    axs[0, i - 1].imshow(np.log1p(np.abs(merged_blocks_dft)), cmap="gray")
+    axs[0, i - 1].imshow(np.log1p(np.abs(merged_blocks_dct)), cmap="gray")
     axs[0, i - 1].axis("off")
     axs[0, i - 1].set_title(f"Zero last {i} rows/cols")
 
-    idft_blocks = [
-        utils.my_idft(dft_block_result, BLOCK_SIZE)
-        for dft_block_result in zeroed_dft_blocks
+    idct_blocks = [
+        utils.my_idct2_block(dct_block_result, BLOCK_SIZE)
+        for dct_block_result in zeroed_dct_blocks
     ]
-    merged_idft_blocks = utils.merge_blocks(idft_blocks, image.shape, BLOCK_SIZE)
+    merged_idct_blocks = utils.merge_blocks(idct_blocks, image.shape, BLOCK_SIZE)
 
-    axs[1, i - 1].imshow(merged_idft_blocks, cmap="gray")
+    axs[1, i - 1].imshow(merged_idct_blocks, cmap="gray")
     axs[1, i - 1].axis("off")
     axs[1, i - 1].set_title(f"Reconstructed {i}")
 
-    error = np.abs(merged_idft_blocks.astype(float) - merged_blocks.astype(float))
+    error = np.abs(merged_idct_blocks.astype(float) - merged_blocks.astype(float))
     axs[2, i - 1].imshow(error, cmap="gray")
     axs[2, i - 1].axis("off")
     axs[2, i - 1].set_title(f"Error {i}")
@@ -152,8 +143,8 @@ for i in range(1, 9):
     percent_mae_values.append(percent_mae)
     percent_mse_values.append(percent_mse)
 
-plt.suptitle("DFT and IDFT with Varying Zeroed Rows and Columns")
-plt.savefig(os.path.join(output_dir, "DFT_IDFT_Error_subplot.jpg"), format="jpg")
+plt.suptitle("DCT and IDCT with Varying Zeroed Rows and Columns")
+plt.savefig(os.path.join(output_dir, "DCT_IDCT_Error_subplot.jpg"), format="jpg")
 plt.show()
 
 # Plot percentage MAE and MSE values
